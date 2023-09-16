@@ -1,0 +1,1 @@
+OldOwnerId=2,NewOwnerId=3,PropertyId=1,time=1659535115828,prevHash=0

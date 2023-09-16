@@ -1,0 +1,13 @@
+steps for create certificate (.p12,.pfx)
+--------------------------------------------------------
+1. open cmd prompt
+2. paste comand on cmde prompt
+--------------------------------------------------------
+ 
+"D:\work\setup_portable\jdk1.8.0_211\bin\keytool" -genkeypair -keystore D:/signature.p12 -storepass mypassword -storetype pkcs12 -alias myalia44s -dname "cn=John Smith, ou=Google, o=Google, c=US"
+
+--------------------------------------------------------
+
+*. D:\work\setup_portable\jdk1.8.0_211\bin => is your jdk path
+
+--------------------------------------------------------

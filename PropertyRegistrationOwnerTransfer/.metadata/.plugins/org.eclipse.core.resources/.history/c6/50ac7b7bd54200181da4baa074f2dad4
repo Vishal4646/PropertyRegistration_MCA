@@ -1,0 +1,1473 @@
+package com.database;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.security.Key;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+
+import com.algo.AES;
+import com.algo.RSA;
+import com.constant.ServerConstants;
+import com.encryption.RSAUtils;
+import com.helper.FileHelper;
+import com.helper.MailUtility;
+
+import com.test.HadoopHelper;
+import com.test.HadoopReaderWriter;
+import com.helper.SMSSender;
+import com.helper.SimpleCryptoAndroidJava;
+import com.helper.StringHelper;
+import com.helper.TestFileDemo;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+import com.model.DocumentModel;
+import com.model.ShareRequestDocModel;
+import com.model.ShareRequestOneMailDocModel;
+import com.model.SignRequestModel;
+import com.model.UserModel;
+import com.pdf.DigitalSignature;
+import com.pdf.Randomkey;
+
+/**
+ * 
+ * @author Admin
+ */
+public class ConnectionManager extends DBUtils {
+
+	public static void main(String[] args) {
+		// getDBConnection();
+		// sendVarificationLinks("nileshkakade6@gmail.com", "9689507660");
+		// updateWrongPassCount("Nilesh");
+		// checkAvailableIp("0:0:0:0:0:0:0:1");
+		// sendOTPToMailAndMobile("Nilesh");
+		// String sql =
+		// "update useraccount set password=? where username like 'Nilesh'";
+		// int list = DBUtils.executeUpdate(sql,"123");
+		// if (list > 0) {
+		// System.err.println("Password Successfully Changed..!!");
+		// }
+		// else{
+		// System.err.println("error");
+		// }
+		HashMap parameters = new HashMap();
+		parameters.put("username1", "Nilesh");
+		parameters.put("rpassword", "123");
+		System.out.println(fPasswd(parameters));
+
+	}
+
+	public static void viewSharedDataFile(ShareRequestDocModel sm,
+			HttpServletResponse response) throws Exception {
+
+		String filename = sm.getFilename();
+		String uid = sm.getSenduserid();
+		String aeskeyenc = sm.getAeskey();
+
+		UserModel um = getUserNameFromUid(uid);
+
+		byte[] encData = TestFileDemo
+				.readFileDataInByte(ServerConstants.FILE_UPLOAD_PATH + "/"
+						+ filename);
+		byte[] privatebyte = TestFileDemo.readFileDataInByte(um.getEmailid()
+				+ "private.bin");
+		String privateKey = new String(privatebyte);
+		RSA rsa = new RSA();
+		String keystr = rsa.decryptUsingPrivate(aeskeyenc, privateKey);
+		AES a = new AES();
+		Key key = a.generateKey(keystr);
+
+		byte[] encrypted = a.decryptUsingKey(encData, key);
+		try (FileOutputStream fos = new FileOutputStream("temp.pdf")) {
+			fos.write(encrypted);
+			// fos.close(); There is no more need for this line since you had
+			// created the instance of "fos" inside the try. And this will
+			// automatically close the OutputStream
+		}
+		response.setContentType("application/pdf");
+		BufferedOutputStream output = new BufferedOutputStream(
+				response.getOutputStream());
+
+		for (int i = 0; i < encrypted.length; i++) {
+			output.write(encrypted[i]);
+		}
+		output.close();
+		response.getOutputStream().flush();
+		response.getOutputStream().close();
+		return;
+
+	}
+
+	public static String sendOTPOnmobilNo(HashMap parameters) {
+		String mobileno = StringHelper.n2s(parameters.get("mobileno"));
+		int random = (int) (Math.random() * 999 + 100);
+		// int nextrandom = (int) (Math.random() * 999 + 100);
+
+		ConnectionManager.sendOTPToMobile(mobileno, random + "");
+		// String OTP = random + "-" + nextrandom;
+		System.out.println("OTP :" + random);
+
+		return random + "";
+	}
+
+	public static List<ShareRequestDocModel> getRecivedDocumentList(String uid) {
+
+		String query = "select * from sharerequestdoc where senduserid like ?";
+
+		List<ShareRequestDocModel> list = DBUtils.getBeanList(
+				ShareRequestDocModel.class, query, uid);
+
+		return list;
+	}
+
+	public static String updateRequestShareOnEmail(HashMap parameters)
+			throws Exception {
+		System.out.println(parameters);
+		String success = "";
+		// userid, fname, lname, emailid, mobile, address, role, access,
+		// qualification, dob, username, emailverify, mobileverify, password
+		String uid = StringHelper.n2s(parameters.get("uid"));
+		String doshareonemaildocidcid = StringHelper.n2s(parameters
+				.get("shareonemaildocid"));
+		String emailid = StringHelper.n2s(parameters.get("emailid"));
+
+		DocumentModel dm = getFileDataFromdid(doshareonemaildocidcid);
+
+		String newFileName = emailid + "_ShareOnEmail_" + dm.getDocName();
+		byte[] encData = TestFileDemo
+				.readFileDataInByte(ServerConstants.FILE_UPLOAD_PATH + "/"
+						+ dm.getDocName());
+		AES a = new AES();
+		Key key = a.generateKey(dm.getAeskey().toString());
+		// got original file data
+		byte[] decData = a.decryptUsingKey(encData, key);
+		String keystr = Randomkey.randomString(16);
+		encryptSimpleFileToEncrypt(keystr, newFileName, decData);
+
+		String sql = "insert into sharerequestonemaildoc (did, uid, senduseremail, aeskey, filename,otp) values(?,?,?,?,?,?)";
+		int random = (int) (Math.random() * 999 + 100);
+		int list = DBUtils.executeUpdate(sql, doshareonemaildocidcid, uid,
+				emailid, keystr, newFileName, random);
+		String lastrecorddatasql = "SELECT * FROM sharerequestonemaildoc ORDER BY sid DESC LIMIT 1;";
+		List<ShareRequestOneMailDocModel> lastRecordList = getBeanList(
+				ShareRequestOneMailDocModel.class, lastrecorddatasql);
+		ShareRequestOneMailDocModel sqm = (ShareRequestOneMailDocModel) lastRecordList
+				.get(0);
+		ConnectionManager
+				.sendMailToEmailAddress(
+						emailid,
+						"Please download file click on "
+								+ ServerConstants.send_file_on_email_link
+								+ "?sid="
+								+ sqm.getSid()
+								+ "&emailid="
+								+ emailid
+								+ " this link..!! <br> <br><B>Your otp is :<a href='#'>"
+								+ random + " </a></B><br><br> Thank You.!!");
+		if (list > 0) {
+
+			success = "Email Requset Send Successfully..!!! ";
+
+		} else {
+			success = "Error adding user to database";
+		}
+		return success;
+
+	}
+
+	public static String updateRequestShare(HashMap parameters)
+			throws Exception {
+		System.out.println(parameters);
+		String success = "";
+		// userid, fname, lname, emailid, mobile, address, role, access,
+		// qualification, dob, username, emailverify, mobileverify, password
+		String uid = StringHelper.n2s(parameters.get("uid"));
+		String docid = StringHelper.n2s(parameters.get("sharedocid"));
+		String uname = StringHelper.n2s(parameters.get("username"));
+		String requestUid = getUidFromUserName(uname);
+		DocumentModel dm = getFileDataFromdid(docid);
+
+		String newFileName = uid + "_Share_" + dm.getDocName();
+		byte[] encData = TestFileDemo
+				.readFileDataInByte(ServerConstants.FILE_UPLOAD_PATH + "/"
+						+ dm.getDocName());
+		AES a = new AES();
+		Key key = a.generateKey(dm.getAeskey().toString());
+		byte[] decData = a.decryptUsingKey(encData, key);
+		String keystr = Randomkey.randomString(16);
+		encryptSimpleFileToEncrypt(keystr, newFileName, decData);
+		UserModel um = getUserNameFromUid(requestUid);
+		byte[] publicbyte = TestFileDemo.readFileDataInByte(um.getEmailid()
+				+ "public.bin");
+		String publickey = new String(publicbyte);
+		RSA rsa = new RSA();
+		String enckey = rsa.encryptUsingPublic(keystr, publickey);
+		String sql = "insert into sharerequestdoc (did, uid, senduserid, aeskey, filename) values(?,?,?,?,?)";
+
+		int list = DBUtils.executeUpdate(sql, docid, uid, requestUid, enckey,
+				newFileName);
+		if (list > 0) {
+
+			success = "Requset Send Successfully..!!! ";
+
+		} else {
+			success = "Error adding user to database";
+		}
+		return success;
+
+	}
+
+	public static int getSendDocumentListCount(String uid) {
+
+		String query = "select * from sharerequestdoc where uid like ?";
+
+		List<ShareRequestDocModel> list = DBUtils.getBeanList(
+				ShareRequestDocModel.class, query, uid);
+
+		return list.size();
+	}
+
+	public static int getRecivedDocumentListCount(String uid) {
+
+		String query = "select * from sharerequestdoc where senduserid like ?";
+
+		List<ShareRequestDocModel> list = DBUtils.getBeanList(
+				ShareRequestDocModel.class, query, uid);
+
+		return list.size();
+	}
+
+	public static String uploadDocument(FileItem fi, String userId,
+			String role, String name, String key) {
+		// docId, docName, docSize, docData, udate
+		// documents
+		System.out.println(key + ":" + role + ":" + name + ":" + fi.getName());
+		try {
+			File f = new File(ServerConstants.LOCAL_UPLOAD);
+			if (!f.exists()) {
+				f.mkdirs();
+			}
+			String fileName = fi.getName();
+			if (role.contentEquals("2"))
+				fileName = fileName + "-" + name;
+
+			fi.write(new File(ServerConstants.LOCAL_UPLOAD + "/" + fileName));
+
+			StringBuffer fileContent = FileHelper
+					.getFileContent(ServerConstants.LOCAL_UPLOAD + "/"
+							+ fileName);
+			SimpleCryptoAndroidJava sc = new SimpleCryptoAndroidJava();
+			byte[] encrypted = sc.encryptNew(fileContent.toString(), "0000");
+			try (FileOutputStream fos = new FileOutputStream(
+					ServerConstants.FILE_UPLOAD_PATH + "/" + fileName)) {
+				fos.write(encrypted);
+				// fos.close(); There is no more need for this line since you
+				// had created the instance of "fos" inside the try. And this
+				// will automatically close the OutputStream
+			}
+			String query = "insert into documents (docName, docSize, docData,userid) values (?,?,?,?)";
+			executeUpdate(query, fileName, fi.getSize(), encrypted, userId);
+
+			return "File Uploaded Successfully! File Indexing Completed!";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	public static String uploadDocumentNew(FileItem fi, String userId,
+			String role, String name, String keystr) {
+		// docId, docName, docSize, docData, udate
+		// documents
+		System.out.println(keystr + ":" + role + ":" + name + ":"
+				+ fi.getName());
+		try {
+			File f = new File(ServerConstants.LOCAL_UPLOAD);
+			if (!f.exists()) {
+				f.mkdirs();
+			}
+			String fileName = fi.getName();
+			if (role.contentEquals("2"))
+				fileName = fileName;
+
+			String filename = userId + "_" + fileName + ".pdf";
+			byte[] data = fi.get();
+			// simple to enc
+			encryptSimpleFileToEncrypt(keystr, filename, data);
+
+			String query = "insert into documents (docName,userid,aeskey) values (?,?,?)";
+			executeUpdate(query, filename, userId, keystr);
+
+			return "File Uploaded Successfully! File Indexing Completed!";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	public static void encryptSimpleFileToEncrypt(String keystr,
+			String filename, byte[] data) throws Exception {
+		AES a = new AES();
+		Key key = a.generateKey(keystr);
+
+		byte[] encrypted = a.encryptUsingKey(data, key);
+		try (FileOutputStream fos = new FileOutputStream(
+				ServerConstants.FILE_UPLOAD_PATH + "/" + filename)) {
+			fos.write(encrypted);
+			System.out.println("Save Data into Encrypted File path:"
+					+ new File(ServerConstants.FILE_UPLOAD_PATH + "/"
+							+ filename).getAbsolutePath());
+			// fos.close(); There is no more need for this line since you had
+			// created the instance of "fos" inside the try. And this will
+			// automatically close the OutputStream
+		}
+		HadoopReaderWriter.writeFile(pathwithfilename);
+		try {
+			if (ServerConstants.IS_HADOOP) {
+				System.out.println("Save Data into Encrypted File path:"
+						+ new File(ServerConstants.FILE_UPLOAD_PATH + "/"
+								+ filename).getAbsolutePath());
+				HadoopHelper.copyFileHDFS1(ServerConstants.FILE_UPLOAD_PATH
+						+ "/" + filename, ServerConstants.HDFS_PROJECT_DIR);
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+	public static String signDocument(FileItem fi, String uid, String rid,
+			String certPass) {
+		// docId, docName, docSize, docData, udate
+		// documents
+		System.out.println(uid + ":" + rid);
+		try {
+			File f = new File(ServerConstants.LOCAL_UPLOAD);
+			if (!f.exists()) {
+				f.mkdirs();
+			}
+			String fileName = fi.getName();
+
+			// String keystr = ConnectionManager.getSecretKey(did);
+			fi.write(new File(ServerConstants.LOCAL_UPLOAD + "/" + fileName));
+			System.out.println("Sertificate Upload done :"
+					+ new File(ServerConstants.LOCAL_UPLOAD + "/" + fileName)
+							.getCanonicalPath());
+			String enckeystr = ConnectionManager.getKeyFromDid(rid);
+			System.out.println("enckeystr :" + enckeystr);
+			// String privateKey = ConnectionManager.getPrivateKeyFromUid(uid);
+			// System.out.println("privateKey :"+privateKey);
+
+			UserModel um = getUserNameFromUid(uid);
+			byte[] privatebyte = TestFileDemo.readFileDataInByte(um
+					.getEmailid() + "private.bin");
+			String privateKey = new String(privatebyte);
+			System.out
+					.println("----------------------------------------------------");
+			System.out.println("privateKey :" + privateKey + " => length:"
+					+ privateKey.length());
+			RSA rsa = new RSA();
+			String keystr = rsa.decryptUsingPrivate(enckeystr, privateKey);
+			System.out.println("Final Keys:" + keystr);
+			System.out
+					.println("----------------------------------------------------");
+			String pdffilename = ConnectionManager.getFileNameFromRid(rid);
+			byte[] fileContent = TestFileDemo
+					.readFileDataInByte(ServerConstants.LOCAL_UPLOAD + "/"
+							+ pdffilename);
+			// System.out.println("fileContent :"+fi.get());
+			AES a = new AES();
+			Key key = a.generateKey(keystr);
+
+			byte[] encrypted = a.decryptUsingKey(fileContent, key);
+			try (FileOutputStream fos = new FileOutputStream("temp.pdf")) {
+				fos.write(encrypted);
+				// fos.close(); There is no more need for this line since you
+				// had
+				// created the instance of "fos" inside the try. And this will
+				// automatically close the OutputStream
+			}
+
+			String pkcs12FileName = new File(ServerConstants.LOCAL_UPLOAD + "/"
+					+ fileName).getCanonicalPath();
+			String pdfInputFileName = "temp.pdf";
+			String pdfOutputFileName = "signedDocumnet.pdf";
+
+			// Document Sign Done
+			DigitalSignature.signDocument(pkcs12FileName, pdfInputFileName,
+					pdfOutputFileName, certPass);
+			System.out.println("Document Sign Done..!!");
+
+			byte[] pdfOutputFileContaint = TestFileDemo
+					.readFileDataInByte(pdfOutputFileName);
+			String newkeystr = Randomkey.randomString(16);
+			DocumentModel dm = ConnectionManager.getOriginalFileName(rid);
+			encryptSimpleFileToEncrypt(newkeystr, dm.getDocName(),
+					pdfOutputFileContaint);
+
+			String sql = "update documents set aeskey= ? ,signstatus='YES' where did like '"
+					+ dm.getDid() + "'";
+			System.err.println(sql);
+			int list = DBUtils.executeUpdate(sql, newkeystr);
+			String sql2 = "update signrequestdoc set status= 'YES' where rid like '"
+					+ rid + "'";
+			System.err.println(sql);
+			int list2 = DBUtils.executeUpdate(sql2);
+
+			// String query =
+			// "insert into documents (docName, docSize, docData,userid) values (?,?,?,?)";
+			// executeUpdate(query, fileName, fi.getSize(), encrypted,
+			// userId);
+
+			return "File Uploaded Successfully! File Indexing Completed!";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	public static String fPasswd(HashMap parameters) {
+		System.err.println(parameters);
+		String userName = StringHelper.n2s(parameters.get("username1"));
+		String rpass = StringHelper.n2s(parameters.get("rpassword"));
+		try {
+			rpass = SimpleCryptoAndroidJava.encryptString(rpass);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.err.println("f**** :" + rpass);
+		String sql = "update useraccount set password= ? where username like '"
+				+ userName + "'";
+		System.err.println(sql);
+		int list = DBUtils.executeUpdate(sql, rpass);
+		if (list > 0) {
+			return "Password Successfully Changed..!!";
+		} else {
+			return "error";
+		}
+	}
+
+	public static String updateIpAddress(String userid, String ipaddress) {
+		String str = "N";
+		// String ipaddress = MyIpAddress.getIpAddress();
+
+		String sql = "update useraccount set ipaddress=?,wrongpassword=? where userid ="
+				+ userid;
+		System.out.println(sql);
+		int list = DBUtils.executeUpdate(sql, ipaddress, "0");
+		if (list > 0) {
+			str = "Y";
+		} else {
+			str = "N";
+		}
+		return str;
+	}
+
+	public static String activeEmail(String email) {
+
+		String sql = "update useraccount set emailactivestatus=? where emailid like '"
+				+ email + "'";
+		System.out.println(sql);
+		int list = DBUtils.executeUpdate(sql, "Y");
+		System.out.println(list + " llll");
+		String str = "";
+		if (list > 0) {
+			str = "Email Successfully Varified..!!!";
+		} else {
+			str = "Email Not Varified..???";
+		}
+		return str;
+	}
+
+	public static String activeMobile(String mobile) {
+
+		String sql = "update useraccount set mobileactivestatus=? where mobile like "
+				+ mobile;
+		int list = DBUtils.executeUpdate(sql, "Y");
+		String str = "";
+		if (list > 0) {
+			str = "Mobile No Successfully Varified..!!!";
+		} else {
+			str = "Mobile No Not Varified..???";
+		}
+		return str;
+	}
+
+	public static UserModel checkLogin(HashMap parameters) {
+		String uname = StringHelper.n2s(parameters.get("uname"));
+		// String mobile = StringHelper.n2s(parameters.get("mobile"));
+		// try {
+		// pass = SimpleCryptoAndroidJava.encryptString(pass);
+		// } catch (Exception e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+
+		String query = "select * from useraccount where emailid like ? or mobile like ?";
+		UserModel um = null;
+		List<UserModel> list = DBUtils.getBeanList(UserModel.class, query,
+				uname, uname);
+		if (list.size() > 0) {
+			um = (UserModel) list.get(0);
+		}
+		return um;
+	}
+
+	public static List<DocumentModel> getUploadedDocumentList(String uid) {
+
+		String query = "select * from documents where userid like ? and signstatus like 'YES'";
+
+		List<DocumentModel> list = DBUtils.getBeanList(DocumentModel.class,
+				query, uid);
+
+		return list;
+	}
+
+	public static List<DocumentModel> getWitoutSignDocumentList(String uid) {
+
+		String query = "select * from documents where userid like ? and signstatus like 'NO'";
+
+		List<DocumentModel> list = DBUtils.getBeanList(DocumentModel.class,
+				query, uid);
+
+		return list;
+	}
+
+	public static int getWitoutSignDocumentListCount(String uid) {
+
+		String query = "select * from documents where userid like ? and signstatus like 'NO'";
+
+		List<DocumentModel> list = DBUtils.getBeanList(DocumentModel.class,
+				query, uid);
+
+		return list.size();
+	}
+
+	public static List<ShareRequestDocModel> getSendDocumentList(String uid) {
+
+		String query = "select * from sharerequestdoc where senduserid like ?";
+
+		List<ShareRequestDocModel> list = DBUtils.getBeanList(
+				ShareRequestDocModel.class, query, uid);
+
+		return list;
+	}
+
+	public static List<ShareRequestOneMailDocModel> getEmailSharebleFidOnSid(
+			String sid) {
+
+		String query = "select * from sharerequestonemaildoc where sid like ?";
+
+		List<ShareRequestOneMailDocModel> list = DBUtils.getBeanList(
+				ShareRequestOneMailDocModel.class, query, sid);
+
+		return list;
+	}
+
+	public static List<ShareRequestDocModel> getSendList(String uid) {
+
+		String query = "select * from sharerequestdoc where uid like ?";
+
+		List<ShareRequestDocModel> list = DBUtils.getBeanList(
+				ShareRequestDocModel.class, query, uid);
+
+		return list;
+	}
+
+	public static List<DocumentModel> getDocumentDataFromDB(String did) {
+
+		String query = "select * from documents where did like ?";
+
+		List<DocumentModel> list = DBUtils.getBeanList(DocumentModel.class,
+				query, did);
+
+		return list;
+	}
+
+	public static List<SignRequestModel> getPendingSignInRequests(String uid) {
+
+		String query = "SELECT * FROM `signrequestdoc` where status like 'NO' and ruid like '"
+				+ uid + "'";
+
+		List<SignRequestModel> list = DBUtils.getBeanList(
+				SignRequestModel.class, query);
+
+		return list;
+	}
+
+	public static String getUidFromUserName(String uname) {
+
+		// String query = "select * from documents where userid like ?";
+
+		String query = "select * from useraccount where emailid like ? or mobile like ?";
+		UserModel um = null;
+		List<UserModel> list = DBUtils.getBeanList(UserModel.class, query,
+				uname, uname);
+		if (list.size() > 0) {
+			um = (UserModel) list.get(0);
+		}
+
+		return um.getUid();
+	}
+
+	public static String getFileNameFromRid(String rid) {
+
+		// String query = "select * from documents where userid like ?";
+
+		String query = "select * from signrequestdoc where rid like ?";
+		SignRequestModel um = null;
+		List<SignRequestModel> list = DBUtils.getBeanList(
+				SignRequestModel.class, query, rid);
+		if (list.size() > 0) {
+			um = (SignRequestModel) list.get(0);
+		}
+
+		return um.getFilename();
+	}
+
+	public static DocumentModel getOriginalFileName(String rid) {
+
+		// String query = "select * from documents where userid like ?";
+
+		String query = "select * from signrequestdoc where rid like ?";
+		SignRequestModel um = null;
+		List<SignRequestModel> list = DBUtils.getBeanList(
+				SignRequestModel.class, query, rid);
+		if (list.size() > 0) {
+			um = (SignRequestModel) list.get(0);
+		}
+
+		String did = um.getDid();
+		String query1 = "select * from documents where did like ?";
+		DocumentModel dm = null;
+		List<DocumentModel> list1 = DBUtils.getBeanList(DocumentModel.class,
+				query1, did);
+		if (list1.size() > 0) {
+			dm = (DocumentModel) list1.get(0);
+		}
+		return dm;
+	}
+
+	public static String getRuidFromUserName(String uname) {
+
+		// String query = "select * from documents where userid like ?";
+
+		String query = "select * from useraccount where emailid like ? or mobile like ?";
+		UserModel um = null;
+		List<UserModel> list = DBUtils.getBeanList(UserModel.class, query,
+				uname, uname);
+		if (list.size() > 0) {
+			um = (UserModel) list.get(0);
+		}
+
+		return um.getUid();
+	}
+
+	public static String getKeyFromDid(String rid) {
+
+		// String query = "select * from documents where userid like ?";
+
+		String query = "select * from signrequestdoc where rid like ?";
+		SignRequestModel um = null;
+		List<SignRequestModel> list = DBUtils.getBeanList(
+				SignRequestModel.class, query, rid);
+		if (list.size() > 0) {
+			um = (SignRequestModel) list.get(0);
+		}
+
+		return um.getAeskey();
+	}
+
+	public static String getFilenameFromdid(String did) {
+
+		// String query = "select * from documents where userid like ?";
+
+		String query = "select * from documents where did like ?";
+		DocumentModel um = null;
+		List<DocumentModel> list = DBUtils.getBeanList(DocumentModel.class,
+				query, did);
+		if (list.size() > 0) {
+			um = (DocumentModel) list.get(0);
+		}
+
+		return um.getDocName();
+	}
+
+	public static DocumentModel getFileDataFromdid(String did) {
+
+		// String query = "select * from documents where userid like ?";
+
+		String query = "select * from documents where did like ?";
+		DocumentModel um = null;
+		List<DocumentModel> list = DBUtils.getBeanList(DocumentModel.class,
+				query, did);
+		if (list.size() > 0) {
+			um = (DocumentModel) list.get(0);
+		}
+
+		return um;
+	}
+
+	public static ShareRequestDocModel getRecivedFileDataFromSid(String sid) {
+
+		// String query = "select * from documents where userid like ?";
+
+		String query = "select * from sharerequestdoc where sid like ?";
+		ShareRequestDocModel um = null;
+		List<ShareRequestDocModel> list = DBUtils.getBeanList(
+				ShareRequestDocModel.class, query, sid);
+		if (list.size() > 0) {
+			um = (ShareRequestDocModel) list.get(0);
+		}
+
+		return um;
+	}
+
+	public static String getSecretKey(String did) {
+
+		// String query = "select * from documents where userid like ?";
+
+		String query = "select * from documents where did like ?";
+		DocumentModel um = null;
+		List<DocumentModel> list = DBUtils.getBeanList(DocumentModel.class,
+				query, did);
+		if (list.size() > 0) {
+			um = (DocumentModel) list.get(0);
+		}
+
+		return um.getAeskey();
+	}
+
+	// public static String getEncryptedKey(UserModel umRequest, String
+	// ownerKey) {
+	//
+	// String encryption = RSAUtils.encryptUsingPublic(ownerKey,
+	// umRequest.getPublickey());
+	// System.out.println(encryption);
+	//
+	// return encryption;
+	// }
+	//
+	// public static String getDecryptedKey(UserModel umRequest,
+	// String encryptedKey) {
+	//
+	// String decryption = RSAUtils.decryptUsingPrivate(encryptedKey,
+	// umRequest.getPrivatekey());
+	// System.out.println(decryption);
+	//
+	// return decryption;
+	// }
+	public static UserModel getUserNameFromUid(String uid) {
+
+		// String query = "select * from documents where userid like ?";
+
+		String query = "select * from useraccount where uid like ?";
+		UserModel um = null;
+		List<UserModel> list = DBUtils.getBeanList(UserModel.class, query, uid);
+		if (list.size() > 0) {
+			um = (UserModel) list.get(0);
+		}
+
+		return um;
+	}
+
+	public static int getUploadedDocumentCount(String uid) {
+
+		String query = "select * from documents where userid like ? and signstatus like 'YES'";
+
+		List<DocumentModel> list = DBUtils.getBeanList(DocumentModel.class,
+				query, uid);
+
+		return list.size();
+	}
+
+	public static int getReceivedDocumentCount(String uid) {
+
+		String query = "select * from documents where userid like ?";
+
+		List<DocumentModel> list = DBUtils.getBeanList(DocumentModel.class,
+				query, uid);
+
+		return list.size();
+	}
+
+	public static UserModel checkLoginOnUserid(String userId) {
+		// String userNameId = StringHelper.n2s(parameters.get("username"));
+		// String pass = StringHelper.n2s(parameters.get("password"));
+
+		String query = "SELECT * FROM useraccount where userid like ?";
+		UserModel um = null;
+		List<UserModel> list = DBUtils.getBeanList(UserModel.class, query,
+				userId);
+		if (list.size() > 0) {
+			um = (UserModel) list.get(0);
+		}
+		return um;
+	}
+
+	public static int getPendingListData(String docid) {
+		// String userNameId = StringHelper.n2s(parameters.get("username"));
+		// String pass = StringHelper.n2s(parameters.get("password"));
+
+		String query = "SELECT * FROM signrequestdoc where did like ? and status like 'NO'";
+		UserModel um = null;
+		List<UserModel> list = DBUtils.getBeanList(UserModel.class, query,
+				docid);
+		return list.size();
+	}
+
+	public static boolean verifySignedOrNot(String docid) {
+		// String userNameId = StringHelper.n2s(parameters.get("username"));
+		// String pass = StringHelper.n2s(parameters.get("password"));
+
+		String query = "SELECT * FROM signrequestdoc where did like ? and status like 'YES'";
+		UserModel um = null;
+		List<UserModel> list = DBUtils.getBeanList(UserModel.class, query,
+				docid);
+		if (list.size() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	public static boolean checkUserNameExists(HashMap parameters) {
+		String uid = StringHelper.n2s(parameters.get("name"));
+		String queryDuplicate = "select 1 from enquirymaster where username='"
+				+ uid + "'";
+		System.out.println("query " + queryDuplicate);
+
+		return dataExists(queryDuplicate);
+	}
+
+	public static void closeConnection(Connection conn) {
+		try {
+			conn.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public static boolean dataExists(String query) {
+
+		boolean success = false;
+		Connection conn = null;
+		ResultSet rs = null;
+		try {
+			conn = ConnectionManager.getDBConnection();
+			rs = conn.createStatement().executeQuery(query);
+			System.out.println("Executing " + query);
+			if (rs.next()) {
+				success = true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return success;
+	}
+
+	public static String deleteuser(String uid) {
+		String query = "delete from useraccount where userid=?";
+		int i = DBUtils.executeUpdate(query, new Object[] { uid });
+		return i + "";
+	}
+
+	public static String deleteFile(String did) {
+		
+		if (ServerConstants.IS_HADOOP) {
+			HadoopHelper.deleteOutputFile(getFilenameFromdid(did));
+		}
+		String query = "delete from documents where did=?";
+		int j = DBUtils.executeUpdate(query, new Object[] { did });
+		query = "delete from signrequestdoc where did=?";
+		int i = DBUtils.executeUpdate(query, new Object[] { did });
+		return j + "";
+	}
+
+	public static String updateRequestSign(HashMap parameters) throws Exception {
+		System.out.println(parameters);
+		String success = "";
+		// userid, fname, lname, emailid, mobile, address, role, access,
+		// qualification, dob, username, emailverify, mobileverify, password
+		String uid = StringHelper.n2s(parameters.get("uid"));
+		String expirydate = StringHelper.n2s(parameters.get("cdate"));
+		String docid = StringHelper.n2s(parameters.get("docid"));
+		String msg = StringHelper.n2s(parameters.get("msg"));
+		String uname = StringHelper.n2s(parameters.get("uname"));
+		String requestUid = getUidFromUserName(uname);
+		DocumentModel dm = getFileDataFromdid(docid);
+
+		String newFileName = uid + "_" + dm.getDocName();
+		byte[] encData = TestFileDemo
+				.readFileDataInByte(ServerConstants.FILE_UPLOAD_PATH + "/"
+						+ dm.getDocName());
+
+		AES a = new AES();
+		Key key = a.generateKey(dm.getAeskey().toString());
+		byte[] decData = a.decryptUsingKey(encData, key);
+
+		String keystr = Randomkey.randomString(16);
+
+		encryptSimpleFileToEncrypt(keystr, newFileName, decData);
+
+		UserModel um = getUserNameFromUid(requestUid);
+		byte[] publicbyte = TestFileDemo.readFileDataInByte(um.getEmailid()
+				+ "public.bin");
+		String publickey = new String(publicbyte);
+		RSA rsa = new RSA();
+
+		System.out
+				.println("-----------------------------------------------------");
+		System.out.println("Public Key:" + publickey);
+		System.out.println("keystr:" + keystr);
+		System.out
+				.println("-----------------------------------------------------");
+		String enckey = rsa.encryptUsingPublic(keystr, publickey);
+		// TestFileDemo.writByteDataToFile(ServerConstants.FILE_UPLOAD_PATH +
+		// "/"+ newFileName, decData);
+
+		String sql = "insert into signrequestdoc (did, uid,filename, expirydate, msg, ruid,aeskey) values(?,?,?,?,?,?,?)";
+
+		int list = DBUtils.executeUpdate(sql, docid, uid, newFileName,
+				expirydate, msg, requestUid, enckey);
+		if (list > 0) {
+
+			success = "Requset Send Successfully..!!! ";
+
+		} else {
+			success = "Error adding user to database";
+		}
+		return success;
+	}
+
+	private static String getPublicKeyFromUid(String uid) {
+		// TODO Auto-generated method stub
+		String query = "select * from useraccount where uid like ?";
+		UserModel um = null;
+		List<UserModel> list = DBUtils.getBeanList(UserModel.class, query, uid);
+		if (list.size() > 0) {
+			um = (UserModel) list.get(0);
+		}
+
+		return um.getPublickey();
+		// return null;
+	}
+
+	private static String getPrivateKeyFromUid(String uid) {
+		// TODO Auto-generated method stub
+		String query = "select * from useraccount where uid like ?";
+		UserModel um = null;
+		List<UserModel> list = DBUtils.getBeanList(UserModel.class, query, uid);
+		if (list.size() > 0) {
+			um = (UserModel) list.get(0);
+		}
+
+		return um.getPrivatekey();
+		// return null;
+	}
+
+	public static StringBuffer uploadDocument(FileItem fi) {
+		String answer = "acd";
+		File f = new File(ServerConstants.LOCAL_UPLOAD);
+		if (!f.exists()) {
+			f.mkdirs();
+		}
+		String fileName = fi.getName();
+		try {
+			fi.write(new File(ServerConstants.LOCAL_UPLOAD + "/" + fileName));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		StringBuffer fileContent = FileHelper
+				.getFileContent(ServerConstants.LOCAL_UPLOAD + "/" + fileName);
+		System.out.println(fileContent.toString());
+
+		return fileContent;
+	}
+
+	public static Connection getDBConnection() {
+		Connection conn = null;
+		try {
+			Class.forName(ServerConstants.db_driver);
+			conn = DriverManager.getConnection(ServerConstants.db_url,
+					ServerConstants.db_user, ServerConstants.db_pwd);
+			// System.out.println("Got Connection");
+		} catch (ClassNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		return conn;
+	}
+
+	public static String sendOTPToMailAndMobile(String emailormobile) {
+		// userid, fname, lname, emailid, mobile, address, role, access,
+		// qualification, dob
+		String sql = "select * from useraccount where emailid like '"
+				+ emailormobile + "' or mobile like '" + emailormobile + "'";
+		List list = getBeanList(UserModel.class, sql);
+		System.out.println("size :" + list.size());
+		if (list.size() < 0) {
+			return "error";
+		} else {
+			UserModel um = (UserModel) list.get(0);
+			int random = (int) (Math.random() * 999 + 100);
+			// int nextrandom = (int) (Math.random() * 999 + 100);
+			System.err.println(um.getMobile() + " : " + um.getEmailid());
+			ConnectionManager.sendOTPToMobile(um.getMobile(), random + "");
+			ConnectionManager.sendOTPToEmail(um.getEmailid(), random + "");
+			// String OTP = random + "-" + nextrandom;
+			System.out.println("OTP :" + random);
+			return random + "";
+		}
+
+	}
+
+	public static String sendOTPToMobile(String mobile, String OTP) {
+		String str = "";
+		String sms[] = { mobile };
+		System.out.println(":::::" + sms[0]);
+		for (int i = 0; i < sms.length; i++) {
+
+			SMSSender sender = new SMSSender(
+					sms[i],
+					"Hi "
+							+ mobile
+							+ ", You Are Login On New Machine, so please refer this OTP :- "
+							+ OTP);
+			try {
+				sender.send();
+				Thread.sleep(4000);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return str;
+	}
+
+	public static String sendOTPToEmail(String email, String OTP) {
+		String str = "";
+		HashMap param = new HashMap();
+		param.put("to", email);
+		param.put("subject", "Activating your Account");
+		param.put(
+				"msg",
+				"Hi "
+						+ email
+						+ ", You Are Login On New Machine, so please refer this OTP :- "
+						+ OTP);
+
+		new MailUtility().sendEmail(param, ServerConstants.adminemail,
+				ServerConstants.adminpass);
+		return str;
+	}
+
+	public static String sendMailToEmailAddress(String email, String message) {
+		String str = "";
+		HashMap param = new HashMap();
+		param.put("to", email);
+		param.put("subject", "Activating your Account");
+		param.put("msg", message);
+
+		new MailUtility().sendEmail(param, ServerConstants.adminemail,
+				ServerConstants.adminpass);
+		return str;
+	}
+
+	public static String sendVarificationLinks(String email, String mobile) {
+
+		HashMap param = new HashMap();
+		param.put("to", email);
+		param.put("subject", "Activating your Account");
+		param.put(
+				"msg",
+				"<div>Successfully Registered...!!! Hi,Activate your account please visit http://"
+						+ ServerConstants.send_verification_link
+						+ "/SecurePrivateCloudNew/tiles/ajax.jsp?methodId=activeemail&email="
+						+ email + "</div>");
+
+		// MailUtility mail=new MailUtility();
+		// new MailUtility().sendEmailMultipart(param);
+		new MailUtility().sendEmail(param, ServerConstants.adminemail,
+				ServerConstants.adminpass);
+
+		// sms----------------------
+		String sms[] = { mobile };
+		System.out.println(":::::" + sms[0]);
+		for (int i = 0; i < sms.length; i++) {
+
+			SMSSender sender = new SMSSender(
+					sms[i],
+					"Successfully Registered...!!! http://"
+							+ ServerConstants.send_verification_link
+							+ "/SecurePrivateCloudNew/tiles/ajax.jsp?methodId=activemobile&mobile="
+							+ mobile);
+			try {
+				sender.send();
+				Thread.sleep(4000);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return "Y";
+	}
+
+	// ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public static String insertUser(HashMap parameters) throws Exception {
+		System.out.println(parameters);
+		String success = "";
+		// userid, fname, lname, emailid, mobile, address, role, access,
+		// qualification, dob, username, emailverify, mobileverify, password
+		String emailid = StringHelper.n2s(parameters.get("emailid"));
+		String mobile = StringHelper.n2s(parameters.get("mobile"));
+		// String skey= StringHelper.n2s(parameters.get("skey"));
+		RSA obj = new RSA();
+
+		String[] a = obj.getNewKeyPair();
+
+		TestFileDemo
+				.writByteDataToFile(emailid + "public.bin", a[0].getBytes());
+		TestFileDemo.writByteDataToFile(emailid + "private.bin",
+				a[1].getBytes());
+		String sql = "insert into useraccount (emailid, mobile) values(?,?)";
+
+		int list = DBUtils.executeUpdate(sql, emailid, mobile);
+		if (list > 0) {
+
+			String str = sendVarificationLinks(emailid, mobile);
+			if (str.equalsIgnoreCase("Y")) {
+				success = "User registered Successfully Email and Mobile Varification Link Send On Your Email Id and Mobile No...!!! ";
+			} else {
+				success = "Error adding user to database";
+			}
+		} else {
+			success = "Error adding user to database";
+		}
+		return success;
+	}
+
+	public static String getRoleName(String role) {
+		String str = "";
+		if (role.equalsIgnoreCase("1")) {
+			str = "MD";
+		} else if (role.equalsIgnoreCase("2")) {
+			str = "Doctor";
+		} else if (role.equalsIgnoreCase("3")) {
+			str = "Receptionist";
+		} else if (role.equalsIgnoreCase("4")) {
+			str = "Cashier";
+		} else if (role.equalsIgnoreCase("5")) {
+			str = "Medical";
+		} else if (role.equalsIgnoreCase("6")) {
+			str = "Nourse";
+		} else if (role.equalsIgnoreCase("7")) {
+			str = "Patient";
+		}
+
+		return str;
+	}
+
+	public static String insertHospitalCharges(HashMap parameters) {
+		System.out.println(parameters);
+		String success = "";
+		// userid, fname, lname, emailid, mobile, address, role, access,
+		// qualification, dob, username, emailverify, mobileverify, password
+		String patientid = StringHelper.n2s(parameters.get("patientid"));
+		String doctorid = StringHelper.n2s(parameters.get("doctorid"));
+		String amt = StringHelper.n2s(parameters.get("amt"));
+
+		String sql = "insert into hospital_charges (patientid, doctorid, amt) values(?,?,?)";
+
+		int list = DBUtils.executeUpdate(sql, patientid, doctorid, amt);
+		if (list > 0) {
+
+			success = "Successfully Add Hosital Charges..!!";
+
+		} else {
+			success = "Error adding user to database";
+		}
+		return success;
+	}
+
+	public static String updatepaycharges(HashMap parameters) {
+		System.out.println(parameters);
+		String success = "";
+		// userid, fname, lname, emailid, mobile, address, role, access,
+		// qualification, dob, username, emailverify, mobileverify, password
+		String patientid = StringHelper.n2s(parameters.get("patientid"));
+		String amt = StringHelper.n2s(parameters.get("amt"));
+
+		String sql = "insert into pay_charges (patientid, amt) values(?,?)";
+
+		int list = DBUtils.executeUpdate(sql, patientid, amt);
+		if (list > 0) {
+
+			success = "Successfully Pay Hosital Charges..!!";
+
+		} else {
+			success = "Error adding user to database";
+		}
+		return success;
+	}
+
+	public static String insertMedicalCharges(HashMap parameters) {
+		System.out.println(parameters);
+		String success = "";
+		// userid, fname, lname, emailid, mobile, address, role, access,
+		// qualification, dob, username, emailverify, mobileverify, password
+		String patientid = StringHelper.n2s(parameters.get("patientid"));
+		String doctorid = StringHelper.n2s(parameters.get("doctorid"));
+		String medicine = StringHelper.n2s(parameters.get("medicine"));
+		String amt = StringHelper.n2s(parameters.get("amt"));
+
+		String sql = "insert into medical_charges (patientid, doctorid,medicine, amt) values(?,?,?,?)";
+
+		int list = DBUtils.executeUpdate(sql, patientid, doctorid, medicine,
+				amt);
+		if (list > 0) {
+
+			success = "Successfully Add Medical Charges..!!";
+
+		} else {
+			success = "Error adding user to database";
+		}
+		return success;
+	}
+
+	public static String updateUser(HashMap parameters) {
+		System.out.println(parameters);
+		String success = "";
+		// userid, fname, lname, emailid, mobile, address, role, access,
+		// qualification, dob, username, emailverify, mobileverify, password
+		String fname = StringHelper.n2s(parameters.get("fname"));
+		String lname = StringHelper.n2s(parameters.get("lname"));
+		String fullname = fname + " " + lname;
+		String emailid = StringHelper.n2s(parameters.get("email"));
+		String phoneno = StringHelper.n2s(parameters.get("mobile"));
+		String address = StringHelper.n2s(parameters.get("address"));
+		String qualification = StringHelper
+				.n2s(parameters.get("qualification"));
+		String dob = StringHelper.n2s(parameters.get("dob"));
+		String username = StringHelper.n2s(parameters.get("username"));
+		String password = StringHelper.n2s(parameters.get("password"));
+		String userid = StringHelper.n2s(parameters.get("userid"));
+		String role = ConnectionManager.getRoleId(parameters.get("userprof")
+				.toString());
+		String sql = "update useraccount set fname=?, lname=?, emailid=?, mobile=?, address=?, role=?, access=?, qualification=?, dob=?, username=?, emailverify=?, mobileverify=?,ipaddress=?, password=? where userid like ?";
+
+		int list = DBUtils.executeUpdate(sql, fname, lname, emailid, phoneno,
+				address, role, "AMD", qualification, dob, username, "N", "N",
+				"N", password, userid);
+		if (list > 0) {
+			String str = sendVarificationLinks(emailid, phoneno);
+			if (str.equalsIgnoreCase("Y")) {
+				success = "User registered Successfully Email and Mobile Varification Link Send On Your Email Id and Mobile No...!!! ";
+			} else {
+				success = "Error adding user to database";
+			}
+		} else {
+			success = "Error adding user to database";
+		}
+		return success;
+	}
+
+	public static String getRoleId(String str) {
+		// TODO Auto-generated method stub
+		// Doctor, Nurse ,Patient,Cashier,Medical,Receptionist,Patient
+		HashMap hm = ServerConstants.hm;
+
+		return hm.get(str).toString();
+	}
+
+	public static String insertStudentFeedback(HashMap parameters) {
+		System.out.println(parameters);
+		String success = "";
+
+		String Abuffer = StringHelper.n2s(parameters.get("Abuffer"));
+		String Bbuffer = StringHelper.n2s(parameters.get("Bbuffer"));
+		String Cbuffer = StringHelper.n2s(parameters.get("Cbuffer"));
+		String Dbuffer = StringHelper.n2s(parameters.get("Dbuffer"));
+		String uid = StringHelper.n2s(parameters.get("uid"));
+		String rollno = StringHelper.n2s(parameters.get("rollno"));
+		String tid = StringHelper.n2s(parameters.get("tid"));
+		String fid = StringHelper.n2s(parameters.get("fid"));
+		String totalscore = StringHelper.n2s(parameters.get("totalscore"));
+		int A[] = new int[7];
+		int B[] = new int[4];
+		int C[] = new int[3];
+		int D[] = new int[10];
+		String Asub[] = Abuffer.split("_");
+		String Bsub[] = Bbuffer.split("_");
+		String Csub[] = Cbuffer.split("_");
+		String Dsub[] = Dbuffer.split("_");
+		for (int i = 0; i < Asub.length; i++) {
+			A[i] = StringHelper.n2i(Asub[i]);
+		}
+		for (int i = 0; i < Bsub.length; i++) {
+			B[i] = StringHelper.n2i(Bsub[i]);
+		}
+		for (int i = 0; i < Csub.length; i++) {
+			C[i] = StringHelper.n2i(Csub[i]);
+		}
+		for (int i = 0; i < Dsub.length; i++) {
+			D[i] = StringHelper.n2i(Dsub[i]);
+		}
+		String sql = "update studentavg set feedback=?,score=" + totalscore
+				+ " where rollno=" + rollno;
+		int list = DBUtils.executeUpdate(sql, "Y");
+		// srno, fid, tid, uid
+		String sql11 = "insert into feedbackstudent (fid,tid,uid) values(?,?,?)";
+		int list11 = DBUtils.executeUpdate(sql11, fid, tid, uid);
+		if (list > 0) {
+			String sql1 = "insert into feedback (A1, A2, A3, A4, A5, A6, A7, B1, B2, B3, B4, C1, C2, C3, D1, D2, D3, D4, D5, D6, D7, D8, D9, D10, uid, fileid, tid,rollno,score) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+			int list1 = DBUtils.executeUpdate(sql1, Asub[0], Asub[1], Asub[2],
+					Asub[3], Asub[4], Asub[5], Asub[6], Bsub[0], Bsub[1],
+					Bsub[2], Bsub[3], Csub[0], Csub[1], Csub[2], Dsub[0],
+					Dsub[1], Dsub[2], Dsub[3], Dsub[4], Dsub[5], Dsub[6],
+					Dsub[7], Dsub[8], Dsub[9], uid, fid, tid, rollno,
+					totalscore);
+
+			if (list1 > 0) {
+				success = "User registered Successfully";
+
+			} else {
+				success = "Error adding user to database";
+			}
+		} else {
+			success = "Error adding user to database";
+		}
+		return success;
+	}
+
+	public static String uploadMarks(HashMap parameters) {
+		System.out.println(parameters);
+		String success = "";
+		String uid = StringHelper.n2s(parameters.get("uid"));
+		String spliteUid[] = uid.split("_");
+		int year = Calendar.getInstance().get(Calendar.YEAR);
+		String sql = "insert into selfevaluationresult (marks,uid,year) values(?,?,?)";
+
+		int list = DBUtils.executeUpdate(sql, spliteUid[1], spliteUid[0], year);
+		if (list > 0) {
+			success = "Your Result Is :" + spliteUid[1];
+
+		} else {
+			success = "Error adding user to database";
+		}
+
+		return success;
+	}
+
+	public static String registerNewUser(HashMap parameters) {
+		System.out.println(parameters);
+		String success = "";
+		String name = StringHelper.n2s(parameters.get("name"));
+		String email = StringHelper.n2s(parameters.get("email"));
+		String phone = StringHelper.n2s(parameters.get("phone"));
+		String loginid = StringHelper.n2s(parameters.get("loginid"));
+		String pass = StringHelper.n2s(parameters.get("pass"));
+		String sql = "insert into useraccounts ( name, email, phone, loginid, pass) values(?,?,?,?,?)";
+		int list = DBUtils
+				.executeUpdate(sql, name, email, phone, loginid, pass);
+		if (list > 0) {
+			success = "User registered Successfully";
+		} else {
+			success = "Error adding user to database";
+		}
+		return success;
+	}
+
+	public static int reject(HashMap request) {
+		String app = "N";
+		String uid = StringHelper.n2s(request.get("uid"));
+		System.out
+				.println(app
+						+ "==============================================================");
+		String query = "update useraccounts set approved=? where uid=?";
+		int i = DBUtils.executeUpdate(query, new Object[] { app, uid });
+		return i;
+	}
+
+	public static double round(double value, int precision) {
+		int scale = (int) Math.pow(10, precision);
+		return (double) Math.round(value * scale) / scale;
+	}
+
+	public static ArrayList<Double> shuffle(ArrayList<Double> value) {
+		ArrayList<Double> returnValues = new ArrayList<Double>();
+		System.out
+				.println("/////////////////////////////OUTPUT" + value.size());
+		for (int i = 0; i < value.size(); i++) {
+			double data = value.get(i);
+			data = data + (Math.random() * 20);
+			System.out.println(value.get(i) + "::" + data);
+			returnValues.add(data);
+		}
+		System.out.println("/////////////////////////////OUTPUT END");
+		return returnValues;
+	}
+
+	public static int approve(HashMap request) {
+		String app = "Y";
+		String uid = StringHelper.n2s(request.get("uid"));
+		System.out
+				.println(app
+						+ "==============================================================");
+		String query = "update useraccounts set approved=? where uid=?";
+		int i = DBUtils.executeUpdate(query, new Object[] { app, uid });
+		return i;
+	}
+
+	public static int approveFile(HashMap request) {
+		String app = "Y";
+		String fid = StringHelper.n2s(request.get("fid"));
+		System.out
+				.println(app
+						+ "==============================================================");
+		String query = "update teacherfiles set approve=? where fid=?";
+		int i = DBUtils.executeUpdate(query, new Object[] { app, fid });
+		return i;
+	}
+	// public static int analysis(HashMap request) {
+	// String app = "";
+	// String rollno = StringHelper.n2s(request.get("rollno"));
+	// String query = "SELECT * FROM studentavg where rollno like "+rollno;
+	// StudentAvgModel sm = null;
+	// List<StudentAvgModel> studentrollno = DBUtils.getBeanList(
+	// StudentAvgModel.class, query);
+	// for (int i = 0; i < studentrollno.size(); i++) {
+	// sm = (StudentAvgModel) studentrollno.get(i);
+	// app=sm.
+	// }
+	// System.out.println(app
+	// + "==============================================================");
+	// String query = "update useraccounts set approved=? where uid=?";
+	// int i = DBUtils.executeUpdate(query, new Object[] { app, uid });
+	// return i;
+	// }
+
+}

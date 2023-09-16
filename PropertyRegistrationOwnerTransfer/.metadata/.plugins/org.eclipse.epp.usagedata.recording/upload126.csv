@@ -1,0 +1,276 @@
+what,kind,bundleId,bundleVersion,description,time
+activated,view,org.eclipse.ui.console,3.5.100.v20110511,"org.eclipse.ui.console.ConsoleView",1523862490484
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862490494
+activated,view,org.eclipse.ui.console,3.5.100.v20110511,"org.eclipse.ui.console.ConsoleView",1523862490511
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862490526
+activated,view,org.eclipse.ui.console,3.5.100.v20110511,"org.eclipse.ui.console.ConsoleView",1523862490537
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862490556
+activated,view,org.eclipse.ui.console,3.5.100.v20110511,"org.eclipse.ui.console.ConsoleView",1523862490569
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862490580
+opened,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862493679
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862493698
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523862503196
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862503989
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862507009
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.findReplace",1523862507027
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.paste",1523862507027
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862507965
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862511940
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.findReplace",1523862511957
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862556217
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523862559625
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862560632
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862561420
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862561455
+executed,command,org.eclipse.ui.ide,3.7.0.v20110809-1737,"org.eclipse.ui.navigate.openResource",1523862561465
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862561985
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.findReplace",1523862562007
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.paste",1523862562135
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862562711
+no handler,command,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.edit.text.java.search.declarations.in.workspace",1523862563662
+executed,command,org.eclipse.ui.workbench.texteditor,3.7.0.v20110505-0800,"org.eclipse.ui.edit.text.delete.line",1523862564292
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1523862565145
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1523862565617
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862566567
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.findReplace",1523862566582
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862578642
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862582617
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862583402
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.save",1523862584937
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862585977
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862587729
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862589115
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523862595345
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523862595665
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523862595880
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862597191
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862598355
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862598405
+executed,command,org.eclipse.ui.ide,3.7.0.v20110809-1737,"org.eclipse.ui.navigate.openResource",1523862598422
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862599951
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.findReplace",1523862599972
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.paste",1523862600120
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862601936
+opened,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523862606105
+started,bundle,org.eclipse.jdt.debug.ui,3.6.1.v20110803_r371,"org.eclipse.jdt.debug.ui",1523862606435
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523862606470
+started,bundle,org.eclipse.jdt.junit,3.7.0.v20110505-0800,"org.eclipse.jdt.junit",1523862606574
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862642207
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.navigate.backwardHistory",1523862642251
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523862649190
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.navigate.backwardHistory",1523862649219
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862652930
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862791532
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523862793913
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863628492
+activated,view,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.PackageExplorer",1523863630135
+started,bundle,org.eclipse.wst.ws.service.policy.ui,1.0.300.v201108240515,"org.eclipse.wst.ws.service.policy.ui",1523863632243
+started,bundle,org.eclipse.wst.ws.service.policy,1.0.303.v201009221810,"org.eclipse.wst.ws.service.policy",1523863632245
+started,bundle,org.eclipse.wst.command.env,1.0.409.v201004211805,"org.eclipse.wst.command.env",1523863632299
+started,bundle,org.eclipse.wst.ws,1.1.203.v201004211805,"org.eclipse.wst.ws",1523863632300
+started,bundle,org.eclipse.compare,3.5.201.R37x_v20110817-0800,"org.eclipse.compare",1523863632612
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863633689
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863639767
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.properties",1523863639789
+opened,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523863642252
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523863642274
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863647464
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863654676
+error,log,,,"Invalid ZIP archive: lib/commons-logging.LICENSE.txt [in HadoopBuddy]",1523863657643
+error,log,,,"Invalid ZIP archive: lib/commons-logging.NOTICE.txt [in HadoopBuddy]",1523863657643
+error,log,,,"Invalid ZIP archive: lib/LICENSE_pdfbox.txt [in HadoopBuddy]",1523863657712
+error,log,,,"Invalid ZIP archive: lib/LICENSE-BouncyCastle.html [in HadoopBuddy]",1523863657712
+error,log,,,"Invalid ZIP archive: lib/License-fontbox.txt [in HadoopBuddy]",1523863657712
+error,log,,,"Invalid ZIP archive: lib/License-jempbox.txt [in HadoopBuddy]",1523863657712
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.selectAll",1523863658020
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.paste",1523863659002
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.save",1523863659951
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.delete",1523863662501
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.save",1523863662946
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863672154
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.findReplace",1523863672169
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863673289
+executed,command,,,"AUTOGEN:::org.eclipse.jdt.internal.ui.CompilationUnitEditor.ruler.actions/org.eclipse.jdt.internal.ui.javaeditor.JavaSelectRulerAction",1523863681646
+executed,command,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.edit.text.java.toggle.comment",1523863704123
+executed,command,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.edit.text.java.toggle.comment",1523863705099
+executed,command,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.edit.text.java.toggle.comment",1523863706218
+executed,command,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.edit.text.java.toggle.comment",1523863706921
+opened,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.ClassFileEditor",1523863707581
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.ClassFileEditor",1523863707604
+no handler,command,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.edit.text.java.toggle.comment",1523863707773
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523863709212
+closed,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.ClassFileEditor",1523863709243
+executed,command,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.edit.text.java.toggle.comment",1523863710070
+executed,command,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.edit.text.java.toggle.comment",1523863710869
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.save",1523863711531
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523863717779
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523863718130
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523863718370
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523863718642
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523863718859
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863721691
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863745695
+started,bundle,org.eclipse.mylyn.ide.ui,3.6.0.v20110608-1400,"org.eclipse.mylyn.ide.ui",1523863750466
+started,bundle,org.eclipse.jpt.jaxb.ui,1.1.1.v201108080010,"org.eclipse.jpt.jaxb.ui",1523863750501
+started,bundle,org.eclipse.jpt.jpa.ui,3.0.1.v201108080010,"org.eclipse.jpt.jpa.ui",1523863750537
+started,bundle,org.eclipse.jst.ws.jaxws.ui,1.0.100.v201104032053,"org.eclipse.jst.ws.jaxws.ui",1523863750588
+started,bundle,org.eclipse.mylyn.java.ui,3.6.0.v20110608-1400,"org.eclipse.mylyn.java.ui",1523863750593
+started,bundle,org.eclipse.pde.api.tools,1.0.301.v20110728_r371,"org.eclipse.pde.api.tools",1523863750686
+started,bundle,org.eclipse.pde.api.tools.ui,1.0.301.v20110803_r371,"org.eclipse.pde.api.tools.ui",1523863750690
+started,bundle,org.eclipse.jpt.jaxb.core,1.0.1.v201108080010,"org.eclipse.jpt.jaxb.core",1523863751136
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.text.contentAssist.proposals",1523863751385
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863763780
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863765183
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863765523
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863778449
+activated,view,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.PackageExplorer",1523863780201
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863784744
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863785844
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.paste",1523863785847
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863809739
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863894586
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863896764
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863903852
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863911852
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863912675
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523863914790
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523867166202
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523867168272
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523867226864
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523867227344
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523867799826
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523867802162
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.copy",1523867803630
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523867804162
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523879520730
+activated,editor,org.eclipse.jst.jsp.ui,1.1.602.v201112071516,"org.eclipse.jst.jsp.core.jspsource.source",1523879523055
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523879526746
+opened,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523879539817
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523879539847
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523879541702
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.navigate.backwardHistory",1523879541714
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523879545175
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523879626862
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523879629123
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880211941
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523880213746
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523880215541
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.save",1523880218942
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523880220467
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.paste",1523880223699
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.save",1523880224270
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523880226858
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880234227
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880428037
+activated,view,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.PackageExplorer",1523880429349
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880456781
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880458784
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880458811
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880460684
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880460710
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880461467
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880461487
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880462039
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880462065
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880462549
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880462574
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880463082
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880463104
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880463566
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880463602
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880464011
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880464037
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880464517
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880464543
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880465003
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880465028
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880465467
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880465497
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880465997
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880466016
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880466526
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880466542
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880466981
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880467008
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880467491
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880467516
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880467932
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880467960
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880468410
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880468492
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880469033
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880469056
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880469532
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880469545
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880469968
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880469992
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880470423
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880470448
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880470842
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880470872
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880471284
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880471307
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880471732
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880471756
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880472168
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880472198
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880472912
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.paste",1523880476601
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880485311
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880495221
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.properties",1523880495234
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880495517
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880499068
+error,log,,,"Invalid ZIP archive: lib/commons-logging.LICENSE.txt [in HadoopBuddy]",1523880500117
+error,log,,,"Invalid ZIP archive: lib/commons-logging.NOTICE.txt [in HadoopBuddy]",1523880500117
+error,log,,,"Invalid ZIP archive: lib/LICENSE_pdfbox.txt [in HadoopBuddy]",1523880500167
+error,log,,,"Invalid ZIP archive: lib/LICENSE-BouncyCastle.html [in HadoopBuddy]",1523880500169
+error,log,,,"Invalid ZIP archive: lib/License-fontbox.txt [in HadoopBuddy]",1523880500169
+error,log,,,"Invalid ZIP archive: lib/License-jempbox.txt [in HadoopBuddy]",1523880500169
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523880500622
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880506860
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880507057
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.save",1523880509077
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.undo",1523880510254
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.save",1523880511576
+error,log,,,"Invalid ZIP archive: lib/commons-logging.LICENSE.txt [in HadoopBuddy]",1523880519993
+error,log,,,"Invalid ZIP archive: lib/commons-logging.NOTICE.txt [in HadoopBuddy]",1523880519994
+error,log,,,"Invalid ZIP archive: lib/LICENSE_pdfbox.txt [in HadoopBuddy]",1523880520075
+error,log,,,"Invalid ZIP archive: lib/LICENSE-BouncyCastle.html [in HadoopBuddy]",1523880520075
+error,log,,,"Invalid ZIP archive: lib/License-fontbox.txt [in HadoopBuddy]",1523880520075
+error,log,,,"Invalid ZIP archive: lib/License-jempbox.txt [in HadoopBuddy]",1523880520077
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880520745
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880659639
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880660236
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880725575
+activated,view,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.PackageExplorer",1523880726148
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880726558
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880727588
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.paste",1523880727598
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880727767
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880730956
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.edit.paste",1523880731920
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880738219
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880742941
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.properties",1523880742954
+error,log,,,"Invalid ZIP archive: lib/commons-logging.LICENSE.txt [in HadoopBuddy]",1523880744006
+error,log,,,"Invalid ZIP archive: lib/commons-logging.NOTICE.txt [in HadoopBuddy]",1523880744007
+error,log,,,"Invalid ZIP archive: lib/LICENSE_pdfbox.txt [in HadoopBuddy]",1523880744053
+error,log,,,"Invalid ZIP archive: lib/LICENSE-BouncyCastle.html [in HadoopBuddy]",1523880744053
+error,log,,,"Invalid ZIP archive: lib/License-fontbox.txt [in HadoopBuddy]",1523880744055
+error,log,,,"Invalid ZIP archive: lib/License-jempbox.txt [in HadoopBuddy]",1523880744055
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523880744947
+activated,view,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.PackageExplorer",1523880749701
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880751075
+activated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880781533
+executed,command,org.eclipse.ui,3.7.0.I20110602-0100,"org.eclipse.ui.file.properties",1523880781551
+error,log,,,"Invalid ZIP archive: lib/commons-logging.LICENSE.txt [in HadoopBuddy]",1523880782209
+error,log,,,"Invalid ZIP archive: lib/commons-logging.NOTICE.txt [in HadoopBuddy]",1523880782209
+error,log,,,"Invalid ZIP archive: lib/LICENSE_pdfbox.txt [in HadoopBuddy]",1523880782271
+error,log,,,"Invalid ZIP archive: lib/LICENSE-BouncyCastle.html [in HadoopBuddy]",1523880782272
+error,log,,,"Invalid ZIP archive: lib/License-fontbox.txt [in HadoopBuddy]",1523880782272
+error,log,,,"Invalid ZIP archive: lib/License-jempbox.txt [in HadoopBuddy]",1523880782272
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523880783078
+activated,view,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.PackageExplorer",1523880784880
+activated,editor,org.eclipse.jdt.ui,3.7.1.r371_v20110824-0800,"org.eclipse.jdt.ui.CompilationUnitEditor",1523880785516
+deactivated,workbench,org.eclipse.ui.workbench,3.7.0.I20110519-0100,"",1523880789001

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<libraryInfos>
+<libraryInfo home="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre" version="1.7.0_07">
+<bootpath>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\resources.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\rt.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\sunrsasign.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\jsse.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\jce.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\charsets.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\jfr.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\ext"/>
+<entry path="C:\WINDOWS\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="D:\Setup\jdk1.7.0_80" version="1.7.0_80">
+<bootpath>
+<entry path="D:\Setup\jdk1.7.0_80\jre\lib\resources.jar"/>
+<entry path="D:\Setup\jdk1.7.0_80\jre\lib\rt.jar"/>
+<entry path="D:\Setup\jdk1.7.0_80\jre\lib\sunrsasign.jar"/>
+<entry path="D:\Setup\jdk1.7.0_80\jre\lib\jsse.jar"/>
+<entry path="D:\Setup\jdk1.7.0_80\jre\lib\jce.jar"/>
+<entry path="D:\Setup\jdk1.7.0_80\jre\lib\charsets.jar"/>
+<entry path="D:\Setup\jdk1.7.0_80\jre\lib\jfr.jar"/>
+<entry path="D:\Setup\jdk1.7.0_80\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\Setup\jdk1.7.0_80\jre\lib\ext"/>
+<entry path="C:\Windows\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\Setup\jdk1.7.0_80\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="D:\work\setup\jdk1.8.0_91" version="1.8.0_91">
+<bootpath>
+<entry path="D:\work\setup\jdk1.8.0_91\jre\lib\resources.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_91\jre\lib\rt.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_91\jre\lib\sunrsasign.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_91\jre\lib\jsse.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_91\jre\lib\jce.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_91\jre\lib\charsets.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_91\jre\lib\jfr.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_91\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\work\setup\jdk1.8.0_91\jre\lib\ext"/>
+<entry path="C:\Windows\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\work\setup\jdk1.8.0_91\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="D:\work\setup\jdk1.7.0_80\jre" version="1.7.0_80">
+<bootpath>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\resources.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\rt.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\sunrsasign.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\jsse.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\jce.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\charsets.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\jfr.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\ext"/>
+<entry path="C:\Windows\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="E:\ReceivedFiles\jdk1.7.0_80" version="1.7.0_80">
+<bootpath>
+<entry path="E:\ReceivedFiles\jdk1.7.0_80\jre\lib\resources.jar"/>
+<entry path="E:\ReceivedFiles\jdk1.7.0_80\jre\lib\rt.jar"/>
+<entry path="E:\ReceivedFiles\jdk1.7.0_80\jre\lib\sunrsasign.jar"/>
+<entry path="E:\ReceivedFiles\jdk1.7.0_80\jre\lib\jsse.jar"/>
+<entry path="E:\ReceivedFiles\jdk1.7.0_80\jre\lib\jce.jar"/>
+<entry path="E:\ReceivedFiles\jdk1.7.0_80\jre\lib\charsets.jar"/>
+<entry path="E:\ReceivedFiles\jdk1.7.0_80\jre\lib\jfr.jar"/>
+<entry path="E:\ReceivedFiles\jdk1.7.0_80\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="E:\ReceivedFiles\jdk1.7.0_80\jre\lib\ext"/>
+<entry path="C:\WINDOWS\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="E:\ReceivedFiles\jdk1.7.0_80\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="D:\eclipse" version="1.8.0_77">
+<bootpath>
+<entry path="D:\eclipse\jre\lib\resources.jar"/>
+<entry path="D:\eclipse\jre\lib\rt.jar"/>
+<entry path="D:\eclipse\jre\lib\sunrsasign.jar"/>
+<entry path="D:\eclipse\jre\lib\jsse.jar"/>
+<entry path="D:\eclipse\jre\lib\jce.jar"/>
+<entry path="D:\eclipse\jre\lib\charsets.jar"/>
+<entry path="D:\eclipse\jre\lib\jfr.jar"/>
+<entry path="D:\eclipse\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\eclipse\jre\lib\ext"/>
+<entry path="C:\Windows\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\eclipse\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07" version="1.7.0_07">
+<bootpath>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\resources.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\rt.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\sunrsasign.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\jsse.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\jce.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\charsets.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\jfr.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\ext"/>
+<entry path="C:\WINDOWS\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\work\setup\jdk1.7.0_07\jdk1.7.0_07\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="D:\work\setup\jdk1.7.0_80" version="1.7.0_80">
+<bootpath>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\resources.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\rt.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\sunrsasign.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\jsse.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\jce.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\charsets.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\jfr.jar"/>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\ext"/>
+<entry path="C:\WINDOWS\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\work\setup\jdk1.7.0_80\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="D:\work\setup\jdk1.8.0_92\jdk1.8.0_92" version="1.8.0_92">
+<bootpath>
+<entry path="D:\work\setup\jdk1.8.0_92\jdk1.8.0_92\jre\lib\resources.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92\jdk1.8.0_92\jre\lib\rt.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92\jdk1.8.0_92\jre\lib\sunrsasign.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92\jdk1.8.0_92\jre\lib\jsse.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92\jdk1.8.0_92\jre\lib\jce.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92\jdk1.8.0_92\jre\lib\charsets.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92\jdk1.8.0_92\jre\lib\jfr.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92\jdk1.8.0_92\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\work\setup\jdk1.8.0_92\jdk1.8.0_92\jre\lib\ext"/>
+<entry path="C:\WINDOWS\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\work\setup\jdk1.8.0_92\jdk1.8.0_92\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="D:\work\setup\jdk1.8.0_92_32bit" version="1.8.0_92">
+<bootpath>
+<entry path="D:\work\setup\jdk1.8.0_92_32bit\jre\lib\resources.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92_32bit\jre\lib\rt.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92_32bit\jre\lib\sunrsasign.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92_32bit\jre\lib\jsse.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92_32bit\jre\lib\jce.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92_32bit\jre\lib\charsets.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92_32bit\jre\lib\jfr.jar"/>
+<entry path="D:\work\setup\jdk1.8.0_92_32bit\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\work\setup\jdk1.8.0_92_32bit\jre\lib\ext"/>
+<entry path="C:\Windows\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\work\setup\jdk1.8.0_92_32bit\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+<libraryInfo home="D:\work\setup_portable\jdk1.8.0_211" version="1.8.0_211">
+<bootpath>
+<entry path="D:\work\setup_portable\jdk1.8.0_211\jre\lib\resources.jar"/>
+<entry path="D:\work\setup_portable\jdk1.8.0_211\jre\lib\rt.jar"/>
+<entry path="D:\work\setup_portable\jdk1.8.0_211\jre\lib\sunrsasign.jar"/>
+<entry path="D:\work\setup_portable\jdk1.8.0_211\jre\lib\jsse.jar"/>
+<entry path="D:\work\setup_portable\jdk1.8.0_211\jre\lib\jce.jar"/>
+<entry path="D:\work\setup_portable\jdk1.8.0_211\jre\lib\charsets.jar"/>
+<entry path="D:\work\setup_portable\jdk1.8.0_211\jre\lib\jfr.jar"/>
+<entry path="D:\work\setup_portable\jdk1.8.0_211\jre\classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="D:\work\setup_portable\jdk1.8.0_211\jre\lib\ext"/>
+<entry path="C:\WINDOWS\Sun\Java\lib\ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="D:\work\setup_portable\jdk1.8.0_211\jre\lib\endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+</libraryInfos>

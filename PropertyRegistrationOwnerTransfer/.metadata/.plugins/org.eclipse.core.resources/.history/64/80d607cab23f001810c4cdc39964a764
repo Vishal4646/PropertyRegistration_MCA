@@ -1,0 +1,233 @@
+<%@page import="com.model.ShareRequestOneMailDocModel"%>
+<%@page import="com.model.ShareRequestDocModel"%>
+<%@page import="com.constant.ServerConstants"%>
+<%@page import="com.helper.TestFileDemo"%>
+<%@page import="com.pdf.Randomkey"%>
+<%@page import="java.io.BufferedOutputStream"%>
+<%@page import="java.security.Key"%>
+<%@page import="com.algo.AES"%>
+<%@page import="com.model.DocumentModel"%>
+<%@page import="java.util.List"%>
+<%@page import="java.io.File"%>
+<%@page import="org.apache.commons.fileupload.FileItem"%>
+<%@page import="com.helper.HttpHelper"%>
+<%@page import="com.model.UserModel"%>
+<%@page import="com.database.ConnectionManager"%>
+<%@page import="com.helper.StringHelper"%>
+<%@page import="java.util.HashMap"%>
+
+<%
+	String sMethod = StringHelper.n2s(request.getParameter("methodId"));
+	String returnString = "";
+	System.out.println("HIIIII");
+	boolean bypasswrite = false;
+
+	HashMap parameters = StringHelper.displayRequest(request);
+
+	if (sMethod.equalsIgnoreCase("registerNewUser")) {
+		returnString = ConnectionManager.insertUser(parameters);
+	} else if (sMethod.equalsIgnoreCase("deleteUser")) {
+		String id = request.getParameter("uid");
+		returnString = ConnectionManager.deleteuser(id);
+	} else if (sMethod.equalsIgnoreCase("requestsign")) {
+		UserModel um = (UserModel) session.getAttribute("USER_MODEL");
+		String id = um.getUid();
+		parameters.put("uid", id);
+		returnString = ConnectionManager.updateRequestSign(parameters);
+	} else if (sMethod.equalsIgnoreCase("sendotponmobile")) {
+
+		String otp = ConnectionManager.sendOTPOnmobilNo(parameters);
+		session.setAttribute("tempOTP", otp);
+	} 
+	// 	else if (sMethod.equalsIgnoreCase("uploadFile")) { 
+	// 		UserModel um=(UserModel)session.getAttribute("USER_MODEL");
+	// 		HashMap uploadMap=HttpHelper.parseMultipartRequest(request);
+	// 		uploadMap.putAll(parameters);
+	// 		if(session.getAttribute("USER_MODEL")==null){
+	// 			 request.getRequestDispatcher("../pages/login.jsp").forward(request, response);
+	// 		}
+
+	// 		FileItem fi=(FileItem)uploadMap.get("fileITEM");
+	// // 		fi.write(new File("E:/test/a.pdf"));
+	// 		System.out.println(uploadMap);
+	// 		System.out.println("usermodel values:"+fi);
+	// 		System.out.println(um.getUid()+":"+um.getEmailid()+":"+um.getRole()+":"+um.getSecretkey());
+	// 		String message=ConnectionManager.uploadDocument(fi,um.getUid(),um.getRole(),um.getEmailid(), um.getSecretkey());
+
+	// 		request.getRequestDispatcher("../pages/dashboard.jsp").forward(request, response);
+	// 	}
+	else if (sMethod.equalsIgnoreCase("deleteFile")) {
+		String did = StringHelper.n2s(parameters.get("did"));
+		ConnectionManager.deleteFile(did);
+		request.getRequestDispatcher("../pages/dashboard.jsp").forward(
+				request, response);
+	} else if (sMethod.equalsIgnoreCase("requestShare")) {
+		UserModel um = (UserModel) session.getAttribute("USER_MODEL");
+		String id = um.getUid();
+		parameters.put("uid", id);
+
+		returnString = ConnectionManager.updateRequestShare(parameters);
+	} else if (sMethod.equalsIgnoreCase("requestShareOnEmail")) {
+		UserModel um = (UserModel) session.getAttribute("USER_MODEL");
+		String id = um.getUid();
+		parameters.put("uid", id);
+
+		returnString = ConnectionManager
+				.updateRequestShareOnEmail(parameters);
+	} else if (sMethod.equalsIgnoreCase("uploadFile")) {
+		UserModel um = (UserModel) session.getAttribute("USER_MODEL");
+		HashMap uploadMap = HttpHelper.parseMultipartRequest(request);
+		uploadMap.putAll(parameters);
+		if (session.getAttribute("USER_MODEL") == null) {
+			request.getRequestDispatcher("../pages/login.jsp").forward(
+					request, response);
+		}
+
+		FileItem fi = (FileItem) uploadMap.get("fileITEM");
+		// 		fi.write(new File("E:/test/a.pdf"));
+		System.out.println(uploadMap);
+
+		String key = Randomkey.randomString(16);
+
+		System.out.println("usermodel values:" + fi);
+		System.out.println(um.getUid() + ":" + um.getEmailid() + ":"
+				+ um.getRole() + ":" + key);
+		String message = ConnectionManager.uploadDocumentNew(fi,
+				um.getUid(), um.getRole(), um.getEmailid(), key);
+
+		request.getRequestDispatcher("../pages/dashboard.jsp").forward(
+				request, response);
+	} else if (sMethod.equalsIgnoreCase("signFile")) {
+		UserModel um = (UserModel) session.getAttribute("USER_MODEL");
+		HashMap uploadMap = HttpHelper.parseMultipartRequest(request);
+		uploadMap.putAll(parameters);
+		if (session.getAttribute("USER_MODEL") == null) {
+			request.getRequestDispatcher("../pages/login.jsp").forward(
+					request, response);
+		}
+
+		FileItem fi = (FileItem) uploadMap.get("fileITEM");
+		// 		fi.write(new File("E:/test/a.pdf"));
+		System.out.println(uploadMap);
+		System.out.println("usermodel values:" + fi);
+		System.out.println(um.getUid() + ":" + um.getEmailid() + ":"
+				+ um.getRole() + ":" + um.getPublickey());
+
+		String message = ConnectionManager.signDocument(fi,
+				um.getUid(), uploadMap.get("signdocid").toString());
+
+		request.getRequestDispatcher("../pages/dashboard.jsp").forward(
+				request, response);
+	} else if (sMethod.equalsIgnoreCase("viewShareFile")) {
+		String sid = StringHelper.n2s(request.getParameter("sid"));
+		ShareRequestDocModel sm = ConnectionManager
+				.getRecivedFileDataFromSid(sid);
+
+		ConnectionManager.viewSharedDataFile(sm, response);
+
+	} else if (sMethod.equalsIgnoreCase("activeemail")) {
+		String email = request.getParameter("email");
+		returnString = ConnectionManager.activeEmail(email);
+
+	} else if (sMethod.equalsIgnoreCase("fPasswd")) {
+		String password = request.getParameter("rpassword");
+		String otp1 = request.getParameter("otp");
+		String otp = (String) session.getAttribute("OTP");
+		System.out.println(otp1 + " : " + otp);
+		if (otp.equalsIgnoreCase(otp1)) {
+			returnString = ConnectionManager.fPasswd(parameters).trim();
+			System.err.println("*** Okay");
+		} else {
+			returnString = "error".trim();
+		}
+	} else if (sMethod.equalsIgnoreCase("updateUser")) {
+		returnString = ConnectionManager.updateUser(parameters);
+	} else if (sMethod.equalsIgnoreCase("updatecharges")) {
+
+		returnString = ConnectionManager
+				.insertHospitalCharges(parameters);
+	} else if (sMethod.equalsIgnoreCase("updatepaycharges")) {
+
+		returnString = ConnectionManager.updatepaycharges(parameters);
+	} else if (sMethod.equalsIgnoreCase("checkotp")) {
+		UserModel um = (UserModel) session.getAttribute("USER_MODEL");
+		String otp = StringHelper.n2s(um.getOtp());
+		String votp = StringHelper.n2s(request.getParameter("otp"));
+		if (otp.equalsIgnoreCase(votp)) {
+			returnString = "1";
+		} else {
+			returnString = "0";
+		}
+	} else if (sMethod.equalsIgnoreCase("activemobile")) {
+		String mobile = request.getParameter("mobile");
+
+		returnString = ConnectionManager.activeMobile(mobile);
+
+	}
+
+	else if (sMethod.equalsIgnoreCase("sendOTP")) {
+		String username1 = request.getParameter("username1");
+		String otp = ConnectionManager
+				.sendOTPToMailAndMobile(username1);
+		session.setAttribute("OTP", otp);
+	}
+
+	else if (sMethod.equalsIgnoreCase("viewFile")) {
+		String fid = request.getParameter("fid");
+		List<DocumentModel> list = ConnectionManager
+				.getDocumentDataFromDB(fid);
+		DocumentModel dm = (DocumentModel) list.get(0);
+		// 		byte[] encdata=dm.getDocData();
+		String filename = dm.getDocName();
+		byte[] encdata = TestFileDemo
+				.readFileDataInByte(ServerConstants.FILE_UPLOAD_PATH
+						+ "/" + filename);
+
+		AES a = new AES();
+
+		String keystr = dm.getAeskey();
+		Key key = a.generateKey(keystr);
+		byte[] dec1 = a.decryptUsingKey(encdata, key);
+		// 		session.setAttribute("OTP",otp);
+		response.setContentType("application/pdf");
+		BufferedOutputStream output = new BufferedOutputStream(
+				response.getOutputStream());
+
+		for (int i = 0; i < dec1.length; i++) {
+			output.write(dec1[i]);
+		}
+		output.close();
+		response.getOutputStream().flush();
+		response.getOutputStream().close();
+		return;
+	}
+
+	else if (sMethod.equalsIgnoreCase("checkLogin")) {
+		UserModel um = ConnectionManager.checkLogin(parameters);
+		if (um != null) {
+
+			UserModel um1 = ConnectionManager.checkLogin(parameters);
+			int random = (int) (Math.random() * 999 + 100);
+			// 				ConnectionManager.sendOTPToMobile(um1.getMobile(),random+"");
+			// 				ConnectionManager.sendOTPToEmail(um1.getEmailid(),random+"");
+			// 				String OTP=random+"-"+nextrandom;
+			System.out.println("OTP :" + random);
+			um1.setOtp(random + "");
+			session.setAttribute("USER_MODEL", um1);
+	
+	} else {
+			returnString = 
+	
+else if (sMethod.equalsIgnoreCase("logout")) {
+		session.removeAttribute("USER_MODEL");
+		bypasswrite = true;
+%>
+<script>
+			window.location.href='<%=request.getContextPath()%>/pages/login.jsp';
+</script>
+<%
+	}
+	if (!bypasswrite) {
+		out.println(returnString);
+	}
+%>

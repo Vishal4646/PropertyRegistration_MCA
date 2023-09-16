@@ -1,0 +1,37 @@
+
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+public class GeneratePDFTest {
+
+    public static void main(String... args) throws FileNotFoundException, DocumentException {
+
+        GeneratePDFTest obj = new GeneratePDFTest();
+        obj.generateNewPdf();
+
+    }
+    
+    public void generateNewPdf()throws FileNotFoundException, DocumentException{
+    	// 1. Create document
+        Document document = new Document(PageSize.A4, 50, 50, 50, 50);
+
+        // 2. Create PdfWriter
+        PdfWriter.getInstance(document, new FileOutputStream("result.pdf"));
+
+        // 3. Open document
+        document.open();
+
+        // 4. Add content
+        document.add(new Paragraph("Create Pdf Document with iText in Java"));
+
+        // 5. Close document
+        document.close();
+    }
+}

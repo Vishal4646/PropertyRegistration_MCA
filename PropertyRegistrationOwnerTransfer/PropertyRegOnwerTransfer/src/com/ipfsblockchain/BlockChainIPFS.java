@@ -1,0 +1,567 @@
+package com.ipfsblockchain;
+
+import io.ipfs.api.IPFS;
+import io.ipfs.api.JSONParser;
+import io.ipfs.api.MerkleNode;
+import io.ipfs.cid.Cid;
+import io.ipfs.multihash.Multihash;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.constant.ServerConstants;
+import com.helper.SimpleCryptoAndroidJava;
+import com.ipfsblockchain.Block;
+import com.propblockchain.StringUtil;
+
+public class BlockChainIPFS {
+	public IPFS ipfs = null;
+	public MerkleNode root = null;
+	
+	public static final String ipfs_link_add = "http://" + ServerConstants.SYSTEM_IP + ":5000/addblock/";
+	public static final String ipfs_link_get = "http://" + ServerConstants.SYSTEM_IP + ":5000/getblock/";
+
+	public BlockChainIPFS() {
+		// TODO Auto-generated constructor stub
+		init();
+	}
+
+	public void init() {
+		ipfs = new IPFS("/ip4/127.0.0.1/tcp/5001");
+		try {
+			ipfs.refs.local();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public MerkleNode createBlockChain() {
+		MerkleNode node = null;
+		try {
+			node = ipfs.object._new(Optional.empty());
+			this.root = node;
+			FileObjectHelper.saveObject(this.root.hash.toString(),
+					ServerConstants.getLastMerkelPath());
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return node;
+	}
+
+	public void reloadChainNode() {
+
+		try {
+			// node =
+			// ipfs.object.get(Cid.fromBase58("QmVDwtDiPq3p5n6Rt6QJ9ZR1mHogBxABnCvXL1C7Z1157S"));
+			Object o = FileObjectHelper.readObject(ServerConstants.getLastMerkelPath());
+			if (o != null)
+				this.root = ipfs.object.get(Cid.fromBase58(o.toString()));
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (this.root == null) {
+			try {
+				this.root = ipfs.object._new(Optional.empty());
+				FileObjectHelper.saveObject(this.root.hash.toString(),
+						ServerConstants.getLastMerkelPath());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+	
+	public void reloadChainNode(String pid) {
+
+		try {
+			// node =
+			// ipfs.object.get(Cid.fromBase58("QmVDwtDiPq3p5n6Rt6QJ9ZR1mHogBxABnCvXL1C7Z1157S"));
+			Object o = FileObjectHelper.readObject(ServerConstants.getLastMerkelPath(pid));
+			if (o != null)
+				this.root = ipfs.object.get(Cid.fromBase58(o.toString()));
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (this.root == null) {
+			try {
+				this.root = ipfs.object._new(Optional.empty());
+				FileObjectHelper.saveObject(this.root.hash.toString(),
+						ServerConstants.getLastMerkelPath(pid));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	public Block createBlock(String data) {
+		BlockChainIPFS br = new BlockChainIPFS();
+
+		String lastBlockSHA = br.reteriveLastBlock();
+		System.out.println("lastBlockSHA = " + lastBlockSHA);
+		Block b = new Block(data, lastBlockSHA, br.root.hash.toBase58());
+		return b;
+	}
+
+	public MerkleNode addBlock(String data) {
+		BlockChainIPFS br = new BlockChainIPFS();
+
+		String lastBlockSHA = br.reteriveLastBlock();
+		System.out.println("lastBlockSHA = " + lastBlockSHA);
+		Block b = new Block(data, lastBlockSHA, br.root.hash.toBase58());
+		// Block b = createBlock(data);
+		String blockchainJson = StringUtil.getJson(b);
+		byte[] bytes = blockchainJson.getBytes();
+		try {
+			reloadChainNode();
+			System.out.println("Last Merkle " + root.hash);
+			MerkleNode lnikNode = ipfs.dag.put(bytes);
+			MerkleNode n = ipfs.object.patch2(root.hash, "add-link",
+					Optional.empty(),
+					Optional.of(System.currentTimeMillis() + ""),
+					Optional.of(lnikNode.hash));
+			FileObjectHelper.saveObject(n.hash.toString(), ServerConstants.getLastMerkelPath());
+			root = n;
+			return n;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public MerkleNode addBlock(String data,String pid) {
+		BlockChainIPFS br = new BlockChainIPFS();
+
+		String lastBlockSHA = br.reteriveLastBlock(pid);
+		System.out.println("lastBlockSHA = " + lastBlockSHA);
+		Block b = new Block(data, lastBlockSHA, br.root.hash.toBase58());
+		// Block b = createBlock(data);
+		String blockchainJson = StringUtil.getJson(b);
+		byte[] bytes = blockchainJson.getBytes();
+		try {
+			reloadChainNode(pid);
+			System.out.println("Last Merkle " + root.hash);
+			MerkleNode lnikNode = ipfs.dag.put(bytes);
+			MerkleNode n = ipfs.object.patch2(root.hash, "add-link",
+					Optional.empty(),
+					Optional.of(System.currentTimeMillis() + ""),
+					Optional.of(lnikNode.hash));
+			FileObjectHelper.saveObject(n.hash.toString(), ServerConstants.getLastMerkelPath(pid));
+			root = n;
+			return n;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.err.println("Error in Blockchain: "  + e.getMessage().toString());
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static String addNewBlock(String data, String pid){
+		BlockChainIPFS br = new BlockChainIPFS();
+
+		Object o = FileObjectHelper.readObject(ServerConstants.getLastMerkelPath(pid));
+		String lastBlockSHA = "";
+		if (o != null){
+			 lastBlockSHA = o.toString().trim();
+		}else{
+			lastBlockSHA = "0";
+		}
+		System.out.println("lastBlockSHA: " + lastBlockSHA);
+
+		Long curretnTime = System.currentTimeMillis();
+		data = data + ",time=" + String.valueOf(curretnTime) + ",prevHash=" + lastBlockSHA;
+		System.out.println("sending data: " + data);
+		
+		String response = call(data, true);
+		System.out.println("response: " + response);
+		response = response.split(",")[1];
+		response = response.split(":")[1];
+		String hash = response.replace("'", "");
+		System.out.println("hash: " + hash);
+		FileObjectHelper.saveObject(hash.toString().trim(), ServerConstants.getLastMerkelPath(pid));
+		
+		return hash;
+	}
+	
+	public static String getBlockByHash(String hash){
+		String response = call(hash, false);
+		System.out.println("response: " + response);
+		return response;
+	}
+	
+	public static List<String> getBlockHistoryById(String pid){
+		List<String> list = new ArrayList<>();
+		Object o = FileObjectHelper.readObject(ServerConstants.getLastMerkelPath(pid));
+		String lastBlockSHA = "";
+		if (o != null){
+			 lastBlockSHA = o.toString().trim();
+		}else{
+			return list;
+		}
+		System.out.println("lastBlockSHA: " + lastBlockSHA);
+		
+		boolean doAgain = true;
+		
+		while(doAgain == true){
+			String response = call(lastBlockSHA, false);
+			response = response + ",Hash=" + lastBlockSHA;
+			HashMap<String, String> map = new HashMap<String, String>();
+			String arr[] = response.split(",");
+			
+			for(int i=0; i<arr.length; i++){
+				map.put(arr[i].split("=")[0], arr[i].split("=")[1]);
+			}
+			
+			try {
+				System.out.println("in try: " + response);
+				list.add(response);
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("error ocucured");
+				System.err.println("Error: " + e.getLocalizedMessage().toString());
+			}
+			
+			if(map.get("prevHash").toString().trim().equalsIgnoreCase("0")){
+				doAgain = false;
+			}else{
+				lastBlockSHA = map.get("prevHash").toString().trim();
+			}
+			
+		}
+		Collections.reverse(list);
+		
+		System.out.println("printing list....");
+		for(int j=0; j<list.size(); j++){
+			System.out.println("list " + j + ": " + list.get(j));
+		}
+		
+		return list;
+	}
+	
+	
+	public static void saveObject(String object, String fileName) {
+        FileOutputStream fos = null;
+        try {
+            File f = new File(fileName);
+            System.out.println(f.getCanonicalPath());
+            fos = new FileOutputStream(f);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(object);
+            oos.flush();
+            oos.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+	
+	public static String call(String hasOrData, boolean isPost) {
+		try {
+			System.out.println("calling");
+			StringBuilder result = new StringBuilder();
+			String createUrl = "";
+			if(isPost == true){
+				createUrl = ipfs_link_add + hasOrData;
+			}else{
+				createUrl = ipfs_link_get + hasOrData;
+			}
+			URL url = new URL(createUrl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			BufferedReader rd = new BufferedReader(new InputStreamReader(
+					conn.getInputStream()));
+			String line;
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+			rd.close();
+			String data = result.toString();
+			//System.out.println(data);
+	
+
+			return data;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+
+	public MerkleNode addBlock(Block b) {
+		// Block b = new Block("Hi im the Second  block", "0");
+		String blockchainJson = StringUtil.getJson(b);
+		byte[] bytes = blockchainJson.getBytes();
+		try {
+			reloadChainNode();
+			System.out.println("Last Merkle " + root.hash);
+			MerkleNode lnikNode = ipfs.dag.put(bytes);
+			MerkleNode n = ipfs.object.patch2(root.hash, "add-link",
+					Optional.empty(),
+					Optional.of(System.currentTimeMillis() + ""),
+					Optional.of(lnikNode.hash));
+			FileObjectHelper.saveObject(n.hash.toString(), ServerConstants.getLastMerkelPath());
+			root = n;
+			return n;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+
+	public String reteriveLastBlock() {
+		// Block b = new Block("Hi im the Second  block", "0");
+		String s = "";
+		try {
+			reloadChainNode();
+			MerkleNode n = ipfs.object.get(root.hash);
+			if (n.links != null && n.links.size() > 0) {
+				MerkleNode lastLinkNode = n.links.get(n.links.size() - 1);
+				System.out.println(lastLinkNode.hash);
+
+				byte[] hashLastNode = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/hash");
+				s = new String(hashLastNode);
+				s = s.replaceAll("\"", "");
+				System.out.println(s);
+			}
+			return s;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public String reteriveLastBlock(String pid) {
+		// Block b = new Block("Hi im the Second  block", "0");
+		String s = "";
+		try {
+			reloadChainNode(pid);
+			MerkleNode n = ipfs.object.get(root.hash);
+			if (n.links != null && n.links.size() > 0) {
+				MerkleNode lastLinkNode = n.links.get(n.links.size() - 1);
+				System.out.println(lastLinkNode.hash);
+
+				byte[] hashLastNode = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/hash");
+				s = new String(hashLastNode);
+				s = s.replaceAll("\"", "");
+				System.out.println(s);
+			}
+			return s;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void verifyBlockChain() {
+		// Block b = new Block("Hi im the Second  block", "0");
+
+		try {
+			reloadChainNode();
+			MerkleNode n = ipfs.object.get(root.hash);
+
+			String currHash = "";
+			String prevHash = "";
+			for (int i = n.links.size() - 1; i < n.links.size(); i--) {
+				MerkleNode lastLinkNode = n.links.get(i);
+				System.out.println(lastLinkNode.hash);
+				byte[] hashLastNode = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/data");
+				currHash = new String(hashLastNode);
+				if (prevHash.length() == 0) {
+					prevHash = currHash;
+				}
+				if (!prevHash.equals(currHash)) {
+					System.out.println("verify error");
+					break;
+				}
+				prevHash = currHash;
+				System.out.println(i + " ==>" + currHash);
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void reteriveData() {
+		// Block b = new Block("Hi im the Second  block", "0");
+
+		try {
+			reloadChainNode();
+			MerkleNode n = ipfs.object.get(root.hash);
+
+			for (int i = 0; i < n.links.size(); i++) {
+				MerkleNode lastLinkNode = n.links.get(i);
+				System.out.println(lastLinkNode.hash);
+				byte[] hashLastNodedata = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/data");
+				byte[] hashLastNodehash = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/hash");
+				byte[] hashLastNodephash = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/previousHash");
+				byte[] hashLastNodetime = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/timeStamp");
+				// byte[] hashLastNode =
+				// ipfs.dag.get(lastLinkNode.hash.toString()
+				// + "/data");
+				// Object {data: "Hi im the 1552098913797 block", hash:
+				// "000f278a0b7ab374c8d17b02d5e236d932045de6c52b27348e1c7424962596ca",
+				// nonce: 93, timeStamp: 1552098913797, previousHash:
+				// "00319f6a01982a81cc1d1cf5a50ae9f4edfafc9ee73a8f66c7a99b3b732d667b"…}
+
+				String s = new String(hashLastNodedata);
+				s = s.replace("\"", "");
+				try {
+					System.out.println(i + " Data ==>" + SimpleCryptoAndroidJava.decryptString(s));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				s = new String(hashLastNodehash);
+				s = s.replace("\"", "");
+				System.out.println(i + " Hash ==>" + s);
+				s = new String(hashLastNodephash);
+				s = s.replace("\"", "");
+				System.out.println(i + " previous Hash ==>" + s);
+				s = new String(hashLastNodetime);
+				System.out.println(i + " Time ==>" + s);
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	public List reteriveAllData() {
+		// Block b = new Block("Hi im the Second  block", "0");
+		List list = new ArrayList<HashMap<String, String>>();
+		HashMap hm = null;
+		String d="",h="",ph="",t="";
+		try {
+			reloadChainNode();
+			MerkleNode n = ipfs.object.get(root.hash);
+
+			for (int i = 0; i < n.links.size(); i++) {
+				MerkleNode lastLinkNode = n.links.get(i);
+				System.out.println(lastLinkNode.hash);
+				byte[] data = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/data");
+				byte[] hash = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/hash");
+				byte[] phash = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/previousHash");
+				byte[] time = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/timeStamp");
+				
+				d = new String(data).replace("\"", "");
+				h = new String(hash).replace("\"", "");
+				ph = new String(phash).replace("\"", "");
+				t = new String(time);
+				
+				hm = new HashMap();
+				
+				hm.put("data", d);
+				hm.put("hash", h);
+				hm.put("previousHash", ph);
+				hm.put("timeStamp", t);
+
+				list.add(hm);
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return list;
+
+	}
+	
+	public List reteriveAllData(String pid) {
+		// Block b = new Block("Hi im the Second  block", "0");
+		List list = new ArrayList<HashMap<String, String>>();
+		HashMap hm = null;
+		String d="",h="",ph="",t="";
+		try {
+			reloadChainNode(pid);
+			MerkleNode n = ipfs.object.get(root.hash);
+
+			for (int i = 0; i < n.links.size(); i++) {
+				MerkleNode lastLinkNode = n.links.get(i);
+				System.out.println(lastLinkNode.hash);
+				byte[] data = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/data");
+				byte[] hash = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/hash");
+				byte[] phash = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/previousHash");
+				byte[] time = ipfs.dag.get(lastLinkNode.hash.toString()
+						+ "/timeStamp");
+				
+				d = new String(data).replace("\"", "");
+				h = new String(hash).replace("\"", "");
+				ph = new String(phash).replace("\"", "");
+				t = new String(time).replace("\"", "");
+				
+				hm = new HashMap();
+				
+				hm.put("data", d);
+				hm.put("hash", h);
+				hm.put("previousHash", ph);
+				hm.put("timeStamp", t);
+
+				list.add(hm);
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+
+}
